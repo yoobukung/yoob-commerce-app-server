@@ -1,0 +1,40 @@
+const express = require("express");
+const authorize = require("../utils/passportConfig").authenticate("jwt", {
+  session: false,
+});
+
+const router = express.Router();
+
+const {
+  sendToAddress,
+  getAddress,
+  createOrder,
+  getMyAllAddress,
+  getOrder,
+  getOrderDetails,
+  getAddressById,
+  getOrderForShipping,
+  updateShipping,
+} = require("../controller/order");
+
+const { paidMoney, sendProducts } = require("../controller/payment");
+
+// Address
+router.post("/api/address/add", authorize, sendToAddress);
+router.get("/api/address/all", authorize, getMyAllAddress);
+router.get("/api/address/:addressNumber", authorize, getAddress);
+router.get("/api/addressById/:addressId", authorize, getAddressById);
+
+// Order
+router.get("/api/order", authorize, getOrder);
+router.get("/api/order/shipping", authorize, getOrderForShipping);
+router.get("/api/order/product/:ordernumber", authorize, getOrderDetails);
+
+router.post("/api/order/add", authorize, createOrder);
+router.post("/api/order/update/shipping", authorize, updateShipping);
+
+router.post("/api/payment/add", authorize, paidMoney);
+// router.patch("/api/payment/check", authorize, checkPayments);
+router.patch("/api/oder/sendproduct", authorize, sendProducts);
+
+module.exports = router;
