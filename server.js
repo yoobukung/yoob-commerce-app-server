@@ -12,7 +12,7 @@ const passport = require("./src/utils/passportConfig");
 const sequelize = require("./src/utils/database");
 
 const app = express();
-const port = process.env.PROT || 8000;
+const port = process.env.PORT || 8000;
 
 // Import Router
 const orderRouter = require("./src/routes/order");
