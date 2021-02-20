@@ -10,7 +10,12 @@ exports.resultvalid = (req, res, next) => {
 };
 
 exports.validateRegister = [
-  body("password", "กรอกอย่างน้อย 8 ตัวอักษร").isLength({ min: 8 }),
-  body("username").notEmpty().withMessage("กรุณากรอก username ด้วย"),
-  body("email").notEmpty().withMessage("กรุณากรอก email ด้วย"),
+  body("password", "กรอกรหัสอย่างน้อย 8 ตัวอักษร")
+    .notEmpty()
+    .isLength({ min: 8 }),
+  body("username")
+    .notEmpty()
+    .isLength({ min: 7 })
+    .withMessage("ชื่อต้องมากกว่า 6 ตัวอักษร"),
+  body("email").notEmpty().isEmail().withMessage("กรุณากรอก email ด้วย"),
 ];

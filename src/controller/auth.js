@@ -15,11 +15,10 @@ exports.register = async (req, res, next) => {
   if (username == "admin000") role = "admin";
   else role = "user";
 
-  console.log(username, email, password);
-
   if (findData.id === iduser) {
     return res.send("กรุณาลองใหม่อีกครั้ง");
   }
+
   try {
     const hashPasword = await bcrypt.hash(password, 5);
     const user = await User.create({
