@@ -30,7 +30,7 @@ const Product = sequelize.define("product", {
     type: Sequelize.STRING,
   },
   description: {
-    type: Sequelize.STRING(3000),
+    type: Sequelize.STRING(50000),
     allowNull: false,
   },
   quantity: {

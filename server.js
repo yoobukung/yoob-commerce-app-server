@@ -24,8 +24,8 @@ const { get404 } = require("./src/controller/error404");
 
 // Middleware
 app.use(helmet());
-app.use(bodyParser.urlencoded({ extended: true, limit: "5mb" }));
-app.use(express.json({ limit: "5mb" }));
+app.use(bodyParser.urlencoded({ extended: true, limit: "8mb" }));
+app.use(express.json({ limit: "8mb" }));
 app.use(logger("dev"));
 app.use(cookieParser());
 app.use(passport.initialize());
@@ -45,7 +45,7 @@ app.use(orderRouter);
 app.use(get404);
 
 // Connect
-sequelize.sync();
+sequelize.sync({ alter: true });
 app.listen(port, () => console.log(`server is on port ${port}`));
 
 // Export สำหรับการ test
