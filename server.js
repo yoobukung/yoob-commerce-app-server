@@ -29,11 +29,12 @@ app.use(express.json({ limit: "8mb" }));
 app.use(logger("dev"));
 app.use(cookieParser());
 app.use(passport.initialize());
-app.use(
-  cors({
-    origin: process.env.URL_CLIENT,
-  })
-);
+app.use(cors());
+// app.use(
+//   cors({
+//     origin: process.env.URL_CLIENT,
+//   })
+// );
 
 // Router
 app.use(authRouter);

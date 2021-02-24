@@ -17,7 +17,11 @@ const {
   updateShipping,
 } = require("../controller/order");
 
-const { paidMoney, sendProducts } = require("../controller/payment");
+const {
+  paidMoney,
+  sendProducts,
+  getPaymentByOrderNumber,
+} = require("../controller/payment");
 
 // Address
 router.post("/api/address/add", authorize, sendToAddress);
@@ -36,5 +40,6 @@ router.post("/api/order/update/shipping", authorize, updateShipping);
 router.post("/api/payment/add", authorize, paidMoney);
 // router.patch("/api/payment/check", authorize, checkPayments);
 router.patch("/api/oder/sendproduct", authorize, sendProducts);
+router.get("/api/getpayment/:ordernumber", authorize, getPaymentByOrderNumber);
 
 module.exports = router;

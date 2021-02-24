@@ -38,3 +38,15 @@ exports.sendProducts = async (req, res, next) => {
     res.status(500).json(error);
   }
 };
+
+exports.getPaymentByOrderNumber = async (req, res, next) => {
+  const { ordernumber } = req.params;
+  try {
+    const data = await Payment.findOne({
+      where: { orderNumber: ordernumber },
+    });
+    res.status(201).json(data);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
