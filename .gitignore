@@ -2,5 +2,4 @@
 node_modules
 jest.config.js 
 Procfile
-Dockerfile
 tests

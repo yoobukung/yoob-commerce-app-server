@@ -1,14 +1,15 @@
 const express = require("express");
+const { product } = require("../controller");
 const {
-  findProduct,
-  findProductByName,
-  AddProduct,
-  EditProduct,
-  RemoveProduct,
-  ProductForSeller,
-  ProductForSellerByName,
-  ProductForSellerById,
-} = require("../controller/product");
+  getProduct,
+  getProductByName,
+  addProduct,
+  editProduct,
+  removeProduct,
+  getProductForSeller,
+  getProductForSellerByName,
+  getProductForSellerById,
+} = product;
 
 const authorize = require("../utils/passportConfig").authenticate("jwt", {
   session: false,
@@ -17,20 +18,20 @@ const authorize = require("../utils/passportConfig").authenticate("jwt", {
 const router = express.Router();
 
 // Not Authenicate
-router.get("/api/product", findProduct);
-router.get("/api/product/:slug", findProductByName);
+router.get("/api/product", getProduct);
+router.get("/api/product/:slug", getProductByName);
+
+router.post("/api/manage/product/add", authorize, addProduct);
+router.patch("/api/manage/product/edit/:id", authorize, editProduct);
+router.delete("/api/manage/product/delete/:id", authorize, removeProduct);
 
 // For Seller
-router.get("/api/manage/product", authorize, ProductForSeller);
-router.get("/api/manage/product/:id", authorize, ProductForSellerByName);
+router.get("/api/manage/product", authorize, getProductForSeller);
+router.get("/api/manage/product/:id", authorize, getProductForSellerByName);
 router.get(
   "/api/manage/productbyId/:productId",
   authorize,
-  ProductForSellerById
+  getProductForSellerById
 );
-
-router.post("/api/manage/product/add", authorize, AddProduct);
-router.patch("/api/manage/product/edit/:id", authorize, EditProduct);
-router.delete("/api/manage/product/delete/:id", authorize, RemoveProduct);
 
 module.exports = router;

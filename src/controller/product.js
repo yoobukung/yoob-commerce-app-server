@@ -11,7 +11,41 @@ const s3 = new AWS.S3({
   region: process.env.AWS_REGION,
 });
 
-exports.AddProduct = async (req, res, next) => {
+exports.getProduct = async (req, res, next) => {
+  const { page, pageSize, categoryId } = req.query;
+  let offset;
+  let condition;
+  if (page == 0) offset = 0;
+  else offset = page * pageSize;
+  if (categoryId !== null || undefined) condition = { where: { categoryId } };
+  else condition = { where: {} };
+
+  try {
+    const all = await Product.findAll({ condition });
+    const data = await Product.findAll({
+      condition,
+      limit: pageSize,
+      offset,
+    });
+
+    res.status(200).json({ data, all });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "สินค้าหมดแล้ว" });
+  }
+};
+
+exports.getProductByName = async (req, res, next) => {
+  const { slug } = req.params;
+  try {
+    const data = await Product.findOne({ where: { slug } });
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ message: "ไม่พบสินค้า" });
+  }
+};
+
+exports.addProduct = async (req, res, next) => {
   const { name, price, image, description, quantity, categoryId } = req.body;
 
   const base64Data = new Buffer.from(
@@ -60,89 +94,7 @@ exports.AddProduct = async (req, res, next) => {
   });
 };
 
-exports.findProduct = async (req, res, next) => {
-  const { page, pageSize, categoryId } = req.query;
-  let offset;
-  let condition;
-  if (page == 0) offset = 0;
-  else offset = page * pageSize;
-  if (categoryId !== null || undefined) condition = { where: { categoryId } };
-  else condition = { where: {} };
-
-  try {
-    const all = await Product.findAll({ condition });
-    const data = await Product.findAll({
-      condition,
-      limit: pageSize,
-      offset,
-    });
-
-    res.status(200).json({ data, all });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "สินค้าหมดแล้ว" });
-  }
-};
-
-exports.ProductForSeller = async (req, res, next) => {
-  try {
-    const data = await Category.findAll({
-      include: [
-        {
-          model: Product,
-          required: true,
-          where: {
-            userId: req.user.id,
-          },
-        },
-      ],
-    });
-    res.status(200).json(data);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "สินค้าไม่มี" });
-  }
-};
-
-exports.findProductByName = async (req, res, next) => {
-  const { slug } = req.params;
-  try {
-    const data = await Product.findOne({ where: { slug } });
-    res.status(200).json(data);
-  } catch (error) {
-    res.status(500).json({ message: "ไม่พบสินค้า" });
-  }
-};
-
-exports.ProductForSellerByName = async (req, res, next) => {
-  const { id } = req.params;
-  try {
-    const data = await Product.findOne({
-      where: {
-        [Op.and]: [{ userId: req.user.id }, { id }],
-      },
-    });
-    res.status(200).json({ data });
-  } catch (error) {
-    res.status(500).send(error);
-  }
-};
-
-exports.ProductForSellerById = async (req, res, next) => {
-  const { productId } = req.params;
-  try {
-    const data = await Product.findOne({
-      where: {
-        [Op.and]: [{ userId: req.user.id }, { id: productId }],
-      },
-    });
-    res.status(200).json(data);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-};
-
-exports.EditProduct = async (req, res, next) => {
+exports.editProduct = async (req, res, next) => {
   const { name, price, image, description, quantity, categoryId } = req.body;
   const { id } = req.params;
   const slug = name.toLowerCase();
@@ -230,7 +182,7 @@ exports.EditProduct = async (req, res, next) => {
   }
 };
 
-exports.RemoveProduct = async (req, res, next) => {
+exports.removeProduct = async (req, res, next) => {
   const { id } = req.params;
   // delete Image
   const product = await Product.findOne({ where: { id: id } });
@@ -249,6 +201,54 @@ exports.RemoveProduct = async (req, res, next) => {
     const data = await Product.destroy({
       where: {
         [Op.and]: [{ userId: req.user.id }, { id }],
+      },
+    });
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+exports.getProductForSeller = async (req, res, next) => {
+  try {
+    const data = await Category.findAll({
+      include: [
+        {
+          model: Product,
+          required: true,
+          where: {
+            userId: req.user.id,
+          },
+        },
+      ],
+    });
+    res.status(200).json(data);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "สินค้าไม่มี" });
+  }
+};
+
+exports.getProductForSellerByName = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const data = await Product.findOne({
+      where: {
+        [Op.and]: [{ userId: req.user.id }, { id }],
+      },
+    });
+    res.status(200).json({ data });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+exports.getProductForSellerById = async (req, res, next) => {
+  const { productId } = req.params;
+  try {
+    const data = await Product.findOne({
+      where: {
+        [Op.and]: [{ userId: req.user.id }, { id: productId }],
       },
     });
     res.status(200).json(data);

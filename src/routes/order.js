@@ -1,4 +1,6 @@
 const express = require("express");
+const { order } = require("../controller");
+const { payment } = require("../controller");
 const authorize = require("../utils/passportConfig").authenticate("jwt", {
   session: false,
 });
@@ -15,13 +17,9 @@ const {
   getAddressById,
   getOrderForShipping,
   updateShipping,
-} = require("../controller/order");
+} = order;
 
-const {
-  paidMoney,
-  sendProducts,
-  getPaymentByOrderNumber,
-} = require("../controller/payment");
+const { paidMoney, sendProducts, getPaymentByOrderNumber } = payment;
 
 // Address
 router.post("/api/address/add", authorize, sendToAddress);

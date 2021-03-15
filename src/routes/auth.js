@@ -3,15 +3,9 @@ const router = express.Router();
 const authorize = require("../utils/passportConfig").authenticate("jwt", {
   session: false,
 });
+const { auth } = require("../controller");
+const { register, loginLocal, getProfile, logout } = auth;
 
-const {
-  register,
-  // finduser,
-  loginLocal,
-  getProfile,
-  logout,
-  // resetPassword,
-} = require("../controller/auth");
 const { validateRegister, resultvalid } = require("../validator/validAuth");
 
 router.post("/api/register", validateRegister, resultvalid, register);
