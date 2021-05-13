@@ -2,12 +2,12 @@
 
 หน้าเว็บไซต์  [E-commerce](https://mycommerce-app-001.firebaseapp.com/)
 
-## introduction
+## Introduction
 โค้ดทั้งหมดนี้เป็นโปรเจคต้นๆ หลังจากที่ผมเริ่มเขียนโปรแกรมมาได้สักพักนึงประมาณ 7 เดือน
 โปรเจคนี้เขียนขึ้นด้วยภาษา Javascript ใช้สำหรับเป็นฐานข้อมูลของเว็บไซต์ [E-commerce](https://mycommerce-app-001.firebaseapp.com/)
 ใข้ Postgresql เป็นฐานข้อมูล และใช้ library sequelize สำหรับให้ node.js เชื่อมต่อข้อมูล
 
-## client
+## Client
 โค้ดสำหรับหน้าเว็บไซต์ของโปรแกรมดูได้ [ที่นี่ client](https://github.com/yoobukung/yoob-commerce-app-client)
 
 ## ระบบต่างๆ ของ server
